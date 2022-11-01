@@ -15,12 +15,27 @@ Resources:
     Properties:
       Name: SampleApi
       StageName: dev
+  DBLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      CompatibleArchitectures:
+        - x86_64
+      CompatibleRuntimes:
+        - python3.9
+      ContentUri: layers/db
+      Description: DB Layer
+      LayerName: DBLayer
+      RetentionPolicy: Delete
+    Metadata:
+      BuildMethod: python3.9
   GetUser:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: get_user/
       Handler: app.handler
       Runtime: python3.9
+      Layers:
+        - !Ref DBLayer
       Architectures:
         - x86_64
       Events:
