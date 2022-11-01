@@ -9,6 +9,12 @@ Globals:
   Function:
     Timeout: 3
 
+Parameters:
+  DbMasterUsername:
+    Type: String
+  DbMasterUserPassword:
+    Type: String
+
 Resources:
   ApiGateway:
     Type: AWS::Serverless::Api
@@ -28,6 +34,21 @@ Resources:
       RetentionPolicy: Delete
     Metadata:
       BuildMethod: python3.9
+  DbCluster:
+    Type: AWS::RDS::DBCluster
+    Properties:
+      DBClusterIdentifier: test-db
+      EnableHttpEndpoint: true
+      Engine: aurora-mysql
+      EngineMode: serverless
+      EngineVersion: 5.7.mysql_aurora.2.07.1
+      MasterUsername: !Ref DbMasterUsername
+      MasterUserPassword: !Ref DbMasterUserPassword
+      DatabaseName: Users
+      ScalingConfiguration:
+        MinCapacity: 1
+        AutoPause: true
+        MaxCapacity: 1
   GetUser:
     Type: AWS::Serverless::Function
     Properties:

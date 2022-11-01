@@ -17,9 +17,5 @@ curl http://localhost:3000/user/{id}
 ## Tests
 
 ```bash
-pip install -r tests/requirements.txt --user
-# unit test
-python -m pytest tests/unit -v
-# integration test
-AWS_SAM_STACK_NAME=<stack-name> python -m pytest tests/integration -v
+make test
 ```
