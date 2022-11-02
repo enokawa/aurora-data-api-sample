@@ -10,9 +10,12 @@ Globals:
     Timeout: 3
 
 Parameters:
-  DbMasterUsername:
+  DbUsername:
     Type: String
-  DbMasterUserPassword:
+  DbPassword:
+    Type: String
+    NoEcho: true
+  DatabaseName:
     Type: String
 
 Resources:
@@ -42,9 +45,9 @@ Resources:
       Engine: aurora-mysql
       EngineMode: serverless
       EngineVersion: 5.7.mysql_aurora.2.07.1
-      MasterUsername: !Ref DbMasterUsername
-      MasterUserPassword: !Ref DbMasterUserPassword
-      DatabaseName: Users
+      MasterUsername: !Ref DbUsername
+      MasterUserPassword: !Ref DbPassword
+      DatabaseName: !Ref DatabaseName
       ScalingConfiguration:
         MinCapacity: 1
         AutoPause: true
