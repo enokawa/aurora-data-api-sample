@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from get_user import app
+from src.api.get_user import app
 
 
 @pytest.fixture()

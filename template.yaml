@@ -28,7 +28,7 @@ Resources:
         - x86_64
       CompatibleRuntimes:
         - python3.9
-      ContentUri: layers/db
+      ContentUri: src/layers/db
       Description: DB Layer
       LayerName: DBLayer
       RetentionPolicy: Delete
@@ -52,7 +52,7 @@ Resources:
   GetUser:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: get_user/
+      CodeUri: src/api/get_user/
       Handler: app.handler
       Runtime: python3.9
       Layers:
