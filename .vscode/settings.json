@@ -1,8 +1,10 @@
 {
   "python.autoComplete.extraPaths": [
+    "./src/api/",
     "./src/layers/db"
   ],
   "python.analysis.extraPaths": [
+    "./src/api/",
     "./src/layers/db"
   ]
 }
