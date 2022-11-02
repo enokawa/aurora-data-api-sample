@@ -246,4 +246,8 @@ $RECYCLE.BIN/
 .aws-sam
 samconfig.toml
 
+# direnv
+
+.envrc
+
 # End of https://www.gitignore.io/api/osx,linux,python,windows,pycharm,visualstudiocode
