@@ -10,16 +10,16 @@ SECRET_ARN = os.getenv('SECRET_ARN')
 DATABASE = os.getenv('DATABASE_NAME')
 
 
-def execute_statement() -> list[dict]:
-  response = client.execute_statement(
-    resourceArn=RDS_ARN,
-    secretArn=SECRET_ARN,
-    sql='SELECT `name`, `email` FROM `users`;',
-    database=DATABASE,
-    includeResultMetadata=True,
-    formatRecordsAs='JSON'
-  )
-  
-  formated = response['formattedRecords']
+def execute_select_statement(sql: str) -> list[dict]:
+  parameters = {
+    'resourceArn': RDS_ARN,
+    'secretArn': SECRET_ARN,
+    'sql': sql,
+    'database': DATABASE,
+    'formatRecordsAs': 'JSON'
+  }
 
-  return json.loads(formated)
+  response = client.execute_statement(**parameters)
+  formated_records = json.loads(response['formattedRecords'])
+
+  return formated_records
