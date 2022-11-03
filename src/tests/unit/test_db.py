@@ -3,7 +3,9 @@ from src.layers.db import db
 
 def test_execute_select_statement():
     ret = db.execute_select_statement(
-        sql='SELECT `name`, `email` FROM `users`;'
+        sql='''SELECT `name`, `email` FROM `users`
+        WHERE `name` = 'john';
+        '''
     )
 
     assert ret == [{

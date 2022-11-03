@@ -8,4 +8,4 @@ deploy:
 	sam build && sam deploy
 
 lint:
-	flake8 src/
+	flake8 --max-line-length=119 src/
