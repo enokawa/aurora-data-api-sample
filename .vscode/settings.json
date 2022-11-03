@@ -6,5 +6,7 @@
   "python.analysis.extraPaths": [
     "./src/api/",
     "./src/layers/db"
-  ]
+  ],
+  "python.linting.flake8Enabled": true,
+  "editor.formatOnSave": true
 }

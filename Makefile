@@ -6,3 +6,6 @@ test:
 
 deploy:
 	sam build && sam deploy
+
+lint:
+	flake8 src/
