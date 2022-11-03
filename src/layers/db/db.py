@@ -29,4 +29,16 @@ def execute_select_statement(sql: str, parameters: list = None) -> list[dict]:
 
 
 def convert_type(parameters: list) -> list[dict]:
-    return [{'name': 'name', 'value': {'stringValue': 'john'}}]
+    for parameter in parameters:
+        if isinstance(parameter['value'], bool):
+            parameter['value'] = {'booleanValue': parameter['value']}
+        elif isinstance(parameter['value'], int):
+            parameter['value'] = {'longValue': parameter['value']}
+        elif isinstance(parameter['value'], float):
+            parameter['value'] = {'doubleValue': parameter['value']}
+        elif isinstance(parameter['value'], str):
+            parameter['value'] = {'stringValue': parameter['value']}
+        elif isinstance(parameter['value'], bytes):
+            parameter['value'] = {'blobValue': parameter['value']}
+
+    return parameters

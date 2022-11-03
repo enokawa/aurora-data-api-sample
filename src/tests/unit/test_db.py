@@ -7,7 +7,6 @@ def test_execute_select_statement():
         WHERE `name` = :name;
         ''',
         parameters=[{'name': 'name', 'value': 'john'}]
-        # parameters=[{'name': 'name', 'value': {'stringValue': 'john'}}]
     )
 
     assert ret == [{
