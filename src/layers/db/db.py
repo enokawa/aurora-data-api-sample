@@ -10,8 +10,8 @@ SECRET_ARN = os.getenv('SECRET_ARN')
 DATABASE = os.getenv('DATABASE_NAME')
 
 
-def execute_select_statement(sql: str, parameter_sets: list = None) -> list[dict]:
-    parameters = {
+def execute_select_statement(sql: str, parameters: list = None) -> list[dict]:
+    params = {
         'resourceArn': RDS_ARN,
         'secretArn': SECRET_ARN,
         'sql': sql,
@@ -19,10 +19,10 @@ def execute_select_statement(sql: str, parameter_sets: list = None) -> list[dict
         'formatRecordsAs': 'JSON'
     }
 
-    if parameter_sets:
-        parameters['parameterSets'] = parameter_sets
+    if parameters:
+        params['parameters'] = parameters
 
-    response = client.execute_statement(**parameters)
+    response = client.execute_statement(**params)
     formated_records = json.loads(response['formattedRecords'])
 
     return formated_records
