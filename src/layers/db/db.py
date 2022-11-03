@@ -20,9 +20,13 @@ def execute_select_statement(sql: str, parameters: list = None) -> list[dict]:
     }
 
     if parameters:
-        params['parameters'] = parameters
+        params['parameters'] = convert_type(parameters)
 
     response = client.execute_statement(**params)
     formated_records = json.loads(response['formattedRecords'])
 
     return formated_records
+
+
+def convert_type(parameters: list) -> list[dict]:
+    return [{'name': 'name', 'value': {'stringValue': 'john'}}]

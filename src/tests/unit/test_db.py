@@ -4,8 +4,10 @@ from src.layers.db import db
 def test_execute_select_statement():
     ret = db.execute_select_statement(
         sql='''SELECT `name`, `email` FROM `users`
-        WHERE `name` = 'john';
-        '''
+        WHERE `name` = :name;
+        ''',
+        parameters=[{'name': 'name', 'value': 'john'}]
+        # parameters=[{'name': 'name', 'value': {'stringValue': 'john'}}]
     )
 
     assert ret == [{
