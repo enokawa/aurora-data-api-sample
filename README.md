@@ -11,7 +11,7 @@ sam deploy --guided
 
 ```bash
 make start-api
-curl http://localhost:3000/user/{id}
+curl http://localhost:3000/user/{name}
 ```
 
 ## Tests
