@@ -245,6 +245,7 @@ $RECYCLE.BIN/
 
 .aws-sam
 samconfig.toml
+src/layers/boto3
 
 # direnv
 

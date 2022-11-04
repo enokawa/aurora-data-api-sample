@@ -7,7 +7,12 @@ Description: >
 
 Globals:
   Function:
-    Timeout: 3
+    Timeout: 10
+    Environment:
+      Variables:
+        RDS_ARN: !GetAtt DbCluster.DBClusterArn
+        SECRET_ARN: !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:aurora-data-api-sample-kD4ITI"
+        DATABASE_NAME: !Ref DatabaseName
 
 Parameters:
   DbUsername:
@@ -37,6 +42,19 @@ Resources:
       RetentionPolicy: Delete
     Metadata:
       BuildMethod: python3.9
+  Boto3Layer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      CompatibleArchitectures:
+        - x86_64
+      CompatibleRuntimes:
+        - python3.9
+      ContentUri: src/layers/boto3
+      Description: boto3 Layer
+      LayerName: Boto3Layer
+      RetentionPolicy: Delete
+    Metadata:
+      BuildMethod: python3.9
   DbCluster:
     Type: AWS::RDS::DBCluster
     Properties:
@@ -60,8 +78,25 @@ Resources:
       Runtime: python3.9
       Layers:
         - !Ref DBLayer
+        - !Ref Boto3Layer
       Architectures:
         - x86_64
+      Policies:
+      - Statement:
+        - Sid: RDSDataPolicy
+          Effect: Allow
+          Action:
+          - rds-data:ExecuteStatement
+          - rds-data:RollbackTransaction
+          - rds-data:CommitTransaction
+          - rds-data:BatchExecuteStatement
+          - rds-data:BeginTransaction
+          Resource: !GetAtt DbCluster.DBClusterArn
+        - Sid: SecretsManagerPolicy
+          Effect: Allow
+          Action:
+          - secretsmanager:GetSecretValue
+          Resource: !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:aurora-data-api-sample-kD4ITI"
       Events:
         GetUser:
           Type: Api

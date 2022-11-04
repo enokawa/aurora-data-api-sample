@@ -1,10 +1,10 @@
 {
   "python.autoComplete.extraPaths": [
-    "./src/api/",
+    "./src/api",
     "./src/layers/db"
   ],
   "python.analysis.extraPaths": [
-    "./src/api/",
+    "./src/api",
     "./src/layers/db"
   ],
   "python.linting.flake8Enabled": true,

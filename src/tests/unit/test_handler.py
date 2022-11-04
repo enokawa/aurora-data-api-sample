@@ -16,6 +16,12 @@ def apigw_event():
     }
 
 
+def test_fetch_user():
+    ret = app.fetch_user(name='john')
+
+    ret[0]['name'] = 'john'
+
+
 def test_handler(apigw_event):
     ret = app.handler(apigw_event, '')
     data = json.loads(ret['body'])
