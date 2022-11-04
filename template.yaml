@@ -101,7 +101,7 @@ Resources:
         GetUser:
           Type: Api
           Properties:
-            Path: /user/{id}
+            Path: /user/{name}
             Method: get
             RestApiId:
               Ref: ApiGateway

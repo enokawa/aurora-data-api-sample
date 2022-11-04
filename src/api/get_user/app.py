@@ -14,11 +14,10 @@ def fetch_user(name: str) -> dict:
 
 
 def handler(event, context):
-    print(event)
-    user = fetch_user(name='john')
+    name = event['pathParameters'].get('name')
+    user = fetch_user(name=name)
     name = user[0]['name']
-    print(f'user: {user}')
-    print(f'name: {name}')
+
     return {
         'statusCode': 200,
         'body': json.dumps({

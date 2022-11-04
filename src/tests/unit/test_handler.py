@@ -10,7 +10,7 @@ def apigw_event():
     return {
         'body': '{ "test": "body"}',
         'queryStringParameters': {'foo': 'bar'},
-        'pathParameters': {'id': '1'},
+        'pathParameters': {'name': 'john'},
         'httpMethod': 'GET',
         'path': '/user/1'
     }
