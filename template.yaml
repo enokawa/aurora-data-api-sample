@@ -6,6 +6,8 @@ Description: >
   Sample SAM Template for aurora-data-api-sample
 
 Globals:
+  Api:
+    OpenApiVersion: 3.0.2
   Function:
     Timeout: 10
     Environment:
