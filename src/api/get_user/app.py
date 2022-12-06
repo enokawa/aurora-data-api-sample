@@ -5,8 +5,7 @@ import db
 
 def fetch_user(name: str) -> dict:
     user = db.execute_select_statement(
-        sql="""SELECT `name`, `email` FROM `users`
-        WHERE `name` = :name;""",
+        sql="SELECT name, email FROM users WHERE name = :name;",
         parameters=[{"name": "name", "value": name}],
     )
 
