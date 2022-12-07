@@ -1,5 +1,4 @@
 import json
-
 import pytest
 
 from src.api.get_user import app
@@ -19,7 +18,7 @@ def apigw_event():
 def test_fetch_user():
     ret = app.fetch_user(name="john")
 
-    ret[0]["name"] = "john"
+    assert ret[0]["name"] == "john"
 
 
 def test_handler(apigw_event):
