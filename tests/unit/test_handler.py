@@ -1,6 +1,5 @@
 import json
 import pytest
-
 from src.api.get_user import app
 
 
@@ -15,13 +14,15 @@ def apigw_event():
     }
 
 
-def test_fetch_user():
+def test_fetch_user(testrun_uid, mocker):
+    mocker.patch("db.DATABASE", testrun_uid)
     ret = app.fetch_user(name="john")
 
     assert ret[0]["name"] == "john"
 
 
-def test_handler(apigw_event):
+def test_handler(apigw_event, testrun_uid, mocker):
+    mocker.patch("db.DATABASE", testrun_uid)
     ret = app.handler(apigw_event, "")
     data = json.loads(ret["body"])
 

@@ -1,13 +1,12 @@
 import json
 import os
-
 import boto3
 
 
 client = boto3.client("rds-data")
-RDS_ARN = os.getenv("RDS_ARN")
-SECRET_ARN = os.getenv("SECRET_ARN")
-DATABASE = os.getenv("DATABASE_NAME")
+RDS_ARN = os.environ["RDS_ARN"]
+SECRET_ARN = os.environ["SECRET_ARN"]
+DATABASE = os.environ["DATABASE_NAME"]
 
 
 def execute_select_statement(sql: str, parameters: list = None) -> list[dict]:
