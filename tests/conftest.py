@@ -3,11 +3,14 @@ import os
 
 import pytest
 import boto3
+from random import choice
+from string import ascii_letters
 
 client = boto3.client("rds-data")
 RDS_ARN = os.getenv("RDS_ARN")
 SECRET_ARN = os.getenv("SECRET_ARN")
 SCHEMA = "sql/00_schema.sql"
+DATA = "sql/01_data.sql"
 
 sys.path.append(
     os.path.abspath(os.path.dirname(os.path.abspath(__file__)) + "/../src/layers/db")
@@ -47,15 +50,29 @@ def execute_statement(
 
 
 @pytest.fixture(scope="session", autouse=True)
-def create_database(testrun_uid):
-    execute_statement(sql=f"CREATE DATABASE IF NOT EXISTS {testrun_uid}")
+def db_name():
+    return "".join(choice(ascii_letters) for _ in range(10))
+
+
+@pytest.fixture(scope="session", autouse=True)
+def create_database(db_name):
+    execute_statement(sql=f"CREATE DATABASE IF NOT EXISTS {db_name}")
 
     with open(SCHEMA, "r") as f:
         sqls = f.read().split(";")
 
     for sql in sqls[:-1]:
-        execute_statement(sql=sql, database=testrun_uid)
+        execute_statement(sql=sql, database=db_name)
 
     yield
 
-    execute_statement(sql=f"DROP DATABASE IF EXISTS {testrun_uid}")
+    execute_statement(sql=f"DROP DATABASE IF EXISTS {db_name}")
+
+
+@pytest.fixture(scope="session", autouse=True)
+def insert_data(db_name):
+    with open(DATA, "r") as f:
+        sqls = f.read().split(";")
+
+    for sql in sqls[:-1]:
+        execute_statement(sql=sql, database=db_name)

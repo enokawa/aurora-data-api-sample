@@ -14,15 +14,15 @@ def apigw_event():
     }
 
 
-def test_fetch_user(testrun_uid, mocker):
-    mocker.patch("db.DATABASE", testrun_uid)
+def test_fetch_user(db_name, mocker):
+    mocker.patch("db.DATABASE", db_name)
     ret = app.fetch_user(name="john")
 
     assert ret[0]["name"] == "john"
 
 
-def test_handler(apigw_event, testrun_uid, mocker):
-    mocker.patch("db.DATABASE", testrun_uid)
+def test_handler(apigw_event, db_name, mocker):
+    mocker.patch("db.DATABASE", db_name)
     ret = app.handler(apigw_event, "")
     data = json.loads(ret["body"])
 

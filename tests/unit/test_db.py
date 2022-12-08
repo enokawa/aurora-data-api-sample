@@ -1,8 +1,8 @@
 from src.layers.db import db
 
 
-def test_execute_select_statement(mocker, testrun_uid):
-    mocker.patch("db.DATABASE", testrun_uid)
+def test_execute_select_statement(mocker, db_name):
+    mocker.patch("db.DATABASE", db_name)
     ret = db.execute_select_statement(
         sql="SELECT name, email FROM users WHERE name = :name;",
         parameters=[{"name": "name", "value": "john"}],
