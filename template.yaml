@@ -72,33 +72,48 @@ Resources:
         MinCapacity: 1
         AutoPause: true
         MaxCapacity: 1
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: LambdaRole
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: "sts:AssumeRole"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: AuroraDataApiSamplePolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - rds-data:ExecuteStatement
+                  - rds-data:RollbackTransaction
+                  - rds-data:CommitTransaction
+                  - rds-data:BatchExecuteStatement
+                  - rds-data:BeginTransaction
+                Resource: !GetAtt DbCluster.DBClusterArn
+              - Effect: "Allow"
+                Action:
+                  - secretsmanager:GetSecretValue
+                Resource: !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:aurora-data-api-sample-kD4ITI"
   GetUser:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: src/api/get_user/
       Handler: app.handler
       Runtime: python3.9
+      Role: !GetAtt LambdaRole.Arn
       Layers:
         - !Ref DBLayer
         - !Ref Boto3Layer
       Architectures:
         - x86_64
-      Policies:
-      - Statement:
-        - Sid: RDSDataPolicy
-          Effect: Allow
-          Action:
-          - rds-data:ExecuteStatement
-          - rds-data:RollbackTransaction
-          - rds-data:CommitTransaction
-          - rds-data:BatchExecuteStatement
-          - rds-data:BeginTransaction
-          Resource: !GetAtt DbCluster.DBClusterArn
-        - Sid: SecretsManagerPolicy
-          Effect: Allow
-          Action:
-          - secretsmanager:GetSecretValue
-          Resource: !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:aurora-data-api-sample-kD4ITI"
       Events:
         GetUser:
           Type: Api
