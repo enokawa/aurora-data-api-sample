@@ -2,15 +2,6 @@ import json
 import pytest
 from src.api.get_user import app
 
-
-@pytest.fixture()
-def apigw_event():
-    return {
-        "pathParameters": {"name": "john"},
-        "path": "/user/john",
-    }
-
-
 apigw_event_params = [
     (
         {
