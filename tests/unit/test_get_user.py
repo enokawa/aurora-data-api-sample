@@ -6,26 +6,51 @@ from src.api.get_user import app
 @pytest.fixture()
 def apigw_event():
     return {
-        "body": '{"test": "body"}',
-        "queryStringParameters": {"foo": "bar"},
         "pathParameters": {"name": "john"},
-        "httpMethod": "GET",
         "path": "/user/john",
     }
 
 
-def test_fetch_user(db_name, mocker):
+apigw_event_params = [
+    (
+        {
+            "pathParameters": {"name": "john"},
+            "path": "/user/john",
+        },
+        {
+            "statusCode": 200,
+            "body": json.dumps({"message": "hello john"}),
+        },
+    ),
+    (
+        {
+            "pathParameters": {"name": "doe"},
+            "path": "/user/doe",
+        },
+        {
+            "statusCode": 404,
+            "body": json.dumps({"message": "not found"}),
+        },
+    ),
+]
+
+user_params = [
+    ("john", [{"name": "john", "email": "john@aurora-data-api-sample.dev"}]),
+    ("doe", []),
+]
+
+
+@pytest.mark.parametrize("name, expected", user_params)
+def test_fetch_user(db_name, mocker, name, expected):
     mocker.patch("db.DATABASE", db_name)
-    ret = app.fetch_user(name="john")
+    ret = app.fetch_user(name=name)
 
-    assert ret[0]["name"] == "john"
+    assert ret == expected
 
 
-def test_handler(apigw_event, db_name, mocker):
+@pytest.mark.parametrize("req, expected", apigw_event_params)
+def test_handler(db_name, mocker, req, expected):
     mocker.patch("db.DATABASE", db_name)
-    ret = app.handler(apigw_event, "")
-    data = json.loads(ret["body"])
+    ret = app.handler(req, "")
 
-    assert ret["statusCode"] == 200
-    assert "message" in ret["body"]
-    assert data["message"] == "hello john"
+    assert ret == expected
