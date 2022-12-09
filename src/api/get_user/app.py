@@ -15,9 +15,15 @@ def fetch_user(name: str) -> dict:
 def handler(event, context):
     name = event["pathParameters"].get("name")
     user = fetch_user(name=name)
-    name = user[0]["name"]
+    if not user:
+        return {
+            "statusCode": 404,
+            "body": json.dumps({"message": "not found"}),
+        }
+
+    username = user[0]["name"]
 
     return {
         "statusCode": 200,
-        "body": json.dumps({"message": f"hello {name}"}),
+        "body": json.dumps({"message": f"hello {username}"}),
     }
