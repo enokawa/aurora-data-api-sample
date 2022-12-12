@@ -14,7 +14,7 @@ DATA = "sql/01_data.sql"
 TABLES = ["users"]
 
 sys.path.append(
-    os.path.abspath(os.path.dirname(os.path.abspath(__file__)) + "/../src/layers/db")
+    os.path.abspath(os.path.dirname(os.path.abspath(__file__)) + "/../../src/layers/db")
 )
 
 
