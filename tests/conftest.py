@@ -76,3 +76,11 @@ def insert_data(db_name):
 
     for sql in sqls[:-1]:
         execute_statement(sql=sql, database=db_name)
+
+
+@pytest.fixture(scope="function", autouse=False)
+def truncate(db_name):
+    def _truncate(table: str):
+        execute_statement(sql=f"TRUNCATE TABLE {table}", database=db_name)
+
+    return _truncate
