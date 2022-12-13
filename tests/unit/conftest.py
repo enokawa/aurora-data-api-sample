@@ -52,7 +52,10 @@ def execute_statement(
 
 @pytest.fixture(scope="session", autouse=True)
 def db_name():
-    return "".join(choice(ascii_letters) for _ in range(10))
+    prefix = "test_"
+    letters = "".join(choice(ascii_letters) for _ in range(10))
+
+    return prefix + letters
 
 
 @pytest.fixture(scope="session", autouse=True)
