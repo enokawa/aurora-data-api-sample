@@ -32,16 +32,14 @@ handler_params = [
 
 
 @pytest.mark.parametrize("name, expected", fetch_user_params)
-def test_fetch_user(db_name, mocker, name, expected):
-    mocker.patch("db.DATABASE", db_name)
+def test_fetch_user(name, expected):
     ret = app.fetch_user(name=name)
 
     assert ret == expected
 
 
 @pytest.mark.parametrize("req, expected", handler_params)
-def test_handler(db_name, mocker, req, expected):
-    mocker.patch("db.DATABASE", db_name)
+def test_handler(req, expected):
     ret = app.handler(req, "")
 
     assert ret == expected

@@ -18,22 +18,6 @@ sys.path.append(
 )
 
 
-def _convert_type(parameters: list) -> list[dict]:
-    for parameter in parameters:
-        if isinstance(parameter["value"], bool):
-            parameter["value"] = {"booleanValue": parameter["value"]}
-        elif isinstance(parameter["value"], int):
-            parameter["value"] = {"longValue": parameter["value"]}
-        elif isinstance(parameter["value"], float):
-            parameter["value"] = {"doubleValue": parameter["value"]}
-        elif isinstance(parameter["value"], str):
-            parameter["value"] = {"stringValue": parameter["value"]}
-        elif isinstance(parameter["value"], bytes):
-            parameter["value"] = {"blobValue": parameter["value"]}
-
-    return parameters
-
-
 def execute_statement(
     sql: str, database: str = None, parameters: list = None
 ) -> list[dict]:
@@ -43,7 +27,7 @@ def execute_statement(
         params["database"] = database
 
     if parameters:
-        params["parameters"] = _convert_type(parameters)
+        params["parameters"] = parameters
 
     response = client.execute_statement(**params)
 
@@ -59,7 +43,7 @@ def db_name():
 
 
 @pytest.fixture(scope="session", autouse=True)
-def create_database(db_name):
+def create_schema(db_name):
     execute_statement(sql=f"CREATE DATABASE IF NOT EXISTS {db_name}")
 
     with open(SCHEMA, "r") as f:
@@ -71,6 +55,11 @@ def create_database(db_name):
     yield
 
     execute_statement(sql=f"DROP DATABASE IF EXISTS {db_name}")
+
+
+@pytest.fixture(scope="function", autouse=True)
+def mock_db_name(mocker, db_name):
+    mocker.patch("db.DATABASE", db_name)
 
 
 @pytest.fixture(scope="session", autouse=True)
