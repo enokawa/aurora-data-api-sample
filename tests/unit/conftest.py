@@ -25,13 +25,10 @@ def execute_statement(
 
     if database:
         params["database"] = database
-
     if parameters:
         params["parameters"] = parameters
 
-    response = client.execute_statement(**params)
-
-    return response
+    return client.execute_statement(**params)
 
 
 @pytest.fixture(scope="session", autouse=True)
