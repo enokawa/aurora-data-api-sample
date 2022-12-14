@@ -16,6 +16,14 @@ curl http://localhost:3000/user/{name}
 
 ## Tests
 
+Unit test
+
 ```bash
-make test
+make unit-test
+```
+
+Integration test
+
+```bash
+make integration-test
 ```
