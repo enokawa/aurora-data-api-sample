@@ -11,7 +11,6 @@ RDS_ARN = os.getenv("RDS_ARN")
 SECRET_ARN = os.getenv("SECRET_ARN")
 SCHEMA = "sql/00_schema.sql"
 DATA = "sql/01_data.sql"
-TABLES = ["users"]
 
 sys.path.append(
     os.path.abspath(os.path.dirname(os.path.abspath(__file__)) + "/../../src/layers/db")
@@ -77,6 +76,9 @@ def truncate(db_name):
 
 
 @pytest.fixture(scope="function", autouse=False)
-def truncate_all(truncate):
-    for table in TABLES:
+def truncate_all(truncate, db_name):
+    records = execute_statement(sql="SHOW TABLES", database=db_name)
+    tables = [record[0].get("stringValue") for record in records["records"]]
+
+    for table in tables:
         truncate(table)
